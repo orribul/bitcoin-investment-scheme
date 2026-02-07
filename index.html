@@ -99,7 +99,7 @@
         .invite-text {
             font-size: 1.1em;
             color: #333;
-            margin-top: 15px;
+            margin: 15px 0 25px 0;
         }
         label {
             display: block;
@@ -173,7 +173,7 @@
             margin-top: 8px;
         }
         .buy-button-container {
-            margin-top: 40px;
+            margin-top: 30px;
             text-align: center;
         }
         .buy-button {
@@ -232,11 +232,8 @@
                     <div class="price-display" id="btcPrice">Laster pris...</div>
                     <div class="price-update" id="lastUpdate">Oppdateres hvert minutt</div>
                 </div>
-            </div>
 
-            <!-- Right column -->
-            <div class="column">
-                <!-- Invite box -->
+                <!-- Invite box (moved to bottom of left column) -->
                 <div class="box invite-box">
                     <h2>Min invitasjonskode</h2>
                     <div class="invite-code-container">
@@ -244,8 +241,20 @@
                         <button class="copy-btn" onclick="copyCode()">Kopier</button>
                     </div>
                     <p class="invite-text">Bruk denne koden for å få 70 kr i gratis avgifter.</p>
-                </div>
 
+                    <!-- "Kjøp nå" button moved here -->
+                    <div class="buy-button-container">
+                        <a href="https://barebitcoin.no" target="_blank" class="buy-button">Kjøp nå</a>
+                        <div class="disclaimer">
+                            Gå til Bare Bitcoin – Norges enkleste Bitcoin-app – for å kjøpe Bitcoin trygt med NOK via Vipps/BankID.<br>
+                            Husk: Investering i kryptovaluta innebærer risiko. Gjør egen research.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="column">
                 <!-- Planner box -->
                 <div class="box planner-box">
                     <h2>Bitcoin Investeringsplanlegger</h2>
@@ -272,14 +281,6 @@
                     <div class="result">
                         Daglig BTC-kjøp: <span id="dailyBTC">0.00000000</span> BTC
                         <div class="btc-result" id="dailyBTCSats"></div>
-                    </div>
-
-                    <div class="buy-button-container">
-                        <a href="https://barebitcoin.no" target="_blank" class="buy-button">Kjøp nå</a>
-                        <div class="disclaimer">
-                            Gå til Bare Bitcoin – Norges enkleste Bitcoin-app – for å kjøpe Bitcoin trygt med NOK via Vipps/BankID.<br>
-                            Husk: Investering i kryptovaluta innebærer risiko. Gjør egen research.
-                        </div>
                     </div>
 
                     <div class="note">
