@@ -3,30 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bitcoin Investeringsplanlegger</title>
+    <title>Bitcoin-veien – Investeringsplanlegger</title>
     <style>
         body {
-            background-color: #FFFFFF; /* White background */
-            color: #F7931A; /* Bitcoin orange text */
+            background-color: #FFFFFF;
+            color: #333333;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
         .container {
-            max-width: 400px;
+            max-width: 450px;
+            width: 100%;
+        }
+        .intro-box, .planner-box {
             background-color: #FFFFFF;
             padding: 30px;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
             text-align: center;
         }
-        h1 {
+        .intro-box h1 {
             color: #F7931A;
-            margin-bottom: 25px;
+            font-size: 2.2em;
+            margin: 0 0 20px 0;
+        }
+        .intro-box p {
+            color: #000000;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .planner-box h2 {
+            color: #F7931A;
+            margin: 0 0 25px 0;
+            font-size: 1.8em;
         }
         label {
             display: block;
@@ -60,7 +76,7 @@
             color: #000000;
             padding: 12px;
             border-radius: 8px;
-            background-color: #FFF8F0; /* very light orange tint */
+            background-color: #FFF8F0;
         }
         .result span {
             color: #F7931A;
@@ -76,26 +92,43 @@
 </head>
 <body>
     <div class="container">
-        <h1>Bitcoin Investeringsplanlegger</h1>
 
-        <label for="netIncome">Månedlig nettoinntekt (kr):</label>
-        <input type="number" id="netIncome" placeholder="f.eks. 60000" step="any">
-
-        <label for="fractionSlider">Andel til investering i Bitcoin: <span id="fractionDisplay">1/2</span></label>
-        <input type="range" id="fractionSlider" min="2" max="12" step="1" value="2">
-
-        <div class="result">
-            Månedlig investering: <span id="investmentAmount">0.00</span> kr
+        <!-- New introductory box -->
+        <div class="intro-box">
+            <h1>Bitcoin-veien</h1>
+            <p>
+                Si farvel til norske kroner, som stadig taper seg i verdi.<br>
+                Si hei til verdens nye, digitale valuta - bitcoin.<br><br>
+                Ta farvel med penger som kan skapes ut av intet av en sentralbank.<br>
+                Si hei til kryptografisk sikret digital valuta som følger en fastslått og uforanderlig utstedelsesrate.<br><br>
+                Ta første steget ned bitcoin-veien.
+            </p>
         </div>
 
-        <div class="result">
-            Tilsvarende daglig investering: <span id="dailyAmount">0.00</span> kr
+        <!-- Original planner box -->
+        <div class="planner-box">
+            <h2>Bitcoin Investeringsplanlegger</h2>
+
+            <label for="netIncome">Månedlig nettoinntekt (kr):</label>
+            <input type="number" id="netIncome" placeholder="f.eks. 60000" step="any">
+
+            <label for="fractionSlider">Andel til investering i Bitcoin: <span id="fractionDisplay">1/2</span></label>
+            <input type="range" id="fractionSlider" min="2" max="12" step="1" value="2">
+
+            <div class="result">
+                Månedlig investering: <span id="investmentAmount">0.00</span> kr
+            </div>
+
+            <div class="result">
+                Tilsvarende daglig investering: <span id="dailyAmount">0.00</span> kr
+            </div>
+
+            <div class="note">
+                Daglig beløp = månedlig investering × 12 ÷ 365<br>
+                (fordeler det månedlige beløpet jevnt over ca. 30,42 dager per måned)
+            </div>
         </div>
 
-        <div class="note">
-            Daglig beløp = månedlig investering × 12 ÷ 365<br>
-            (fordeler det månedlige beløpet jevnt over ca. 30,42 dager per måned)
-        </div>
     </div>
 
     <script>
@@ -119,13 +152,10 @@
             dailyAmountEl.textContent = dailyInvestment.toFixed(2);
         }
 
-        // Update whenever inputs change
         slider.addEventListener('input', updateCalculations);
         netIncomeInput.addEventListener('input', updateCalculations);
 
-        // Run once on load
         updateCalculations();
     </script>
 </body>
-
 </html>
