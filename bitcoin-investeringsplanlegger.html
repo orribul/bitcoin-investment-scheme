@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Investeringsplanlegger</title>
+    <style>
+        body {
+            background-color: #FFFFFF; /* White background */
+            color: #F7931A; /* Bitcoin orange text */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 400px;
+            background-color: #FFFFFF;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #F7931A;
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin: 15px 0 8px;
+            font-weight: bold;
+            color: #F7931A;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #F7931A;
+            border-radius: 6px;
+            font-size: 18px;
+            box-sizing: border-box;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 10px;
+            accent-color: #F7931A;
+            margin: 10px 0;
+        }
+        #fractionDisplay {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #F7931A;
+        }
+        .result {
+            margin: 25px 0;
+            font-size: 1.25em;
+            color: #000000;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: #FFF8F0; /* very light orange tint */
+        }
+        .result span {
+            color: #F7931A;
+            font-weight: bold;
+            font-size: 1.4em;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bitcoin Investeringsplanlegger</h1>
+
+        <label for="netIncome">Månedlig nettoinntekt (kr):</label>
+        <input type="number" id="netIncome" placeholder="f.eks. 60000" step="any">
+
+        <label for="fractionSlider">Andel til investering i Bitcoin: <span id="fractionDisplay">1/2</span></label>
+        <input type="range" id="fractionSlider" min="2" max="12" step="1" value="2">
+
+        <div class="result">
+            Månedlig investering: <span id="investmentAmount">0.00</span> kr
+        </div>
+
+        <div class="result">
+            Tilsvarende daglig investering: <span id="dailyAmount">0.00</span> kr
+        </div>
+
+        <div class="note">
+            Daglig beløp = månedlig investering × 12 ÷ 365<br>
+            (fordeler det månedlige beløpet jevnt over ca. 30,42 dager per måned)
+        </div>
+    </div>
+
+    <script>
+        const netIncomeInput = document.getElementById('netIncome');
+        const slider = document.getElementById('fractionSlider');
+        const fractionDisplay = document.getElementById('fractionDisplay');
+        const investmentAmountEl = document.getElementById('investmentAmount');
+        const dailyAmountEl = document.getElementById('dailyAmount');
+
+        function updateCalculations() {
+            const denominator = parseInt(slider.value);
+            fractionDisplay.textContent = `1/${denominator}`;
+
+            const netIncome = parseFloat(netIncomeInput.value) || 0;
+            const fraction = 1 / denominator;
+
+            const monthlyInvestment = netIncome * fraction;
+            const dailyInvestment = monthlyInvestment * 12 / 365;
+
+            investmentAmountEl.textContent = monthlyInvestment.toFixed(2);
+            dailyAmountEl.textContent = dailyInvestment.toFixed(2);
+        }
+
+        // Update whenever inputs change
+        slider.addEventListener('input', updateCalculations);
+        netIncomeInput.addEventListener('input', updateCalculations);
+
+        // Run once on load
+        updateCalculations();
+    </script>
+</body>
+</html>
