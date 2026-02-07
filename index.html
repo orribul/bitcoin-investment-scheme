@@ -20,7 +20,7 @@
             max-width: 450px;
             width: 100%;
         }
-        .intro-box, .planner-box {
+        .intro-box, .price-box, .planner-box {
             background-color: #FFFFFF;
             padding: 30px;
             border-radius: 12px;
@@ -47,6 +47,21 @@
             line-height: 1.6;
             margin: 0;
         }
+        .price-box h2 {
+            color: #F7931A;
+            margin: 0 0 15px 0;
+            font-size: 1.6em;
+        }
+        .price-display {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #F7931A;
+            margin: 10px 0;
+        }
+        .price-update {
+            font-size: 0.9em;
+            color: #555;
+        }
         .planner-box h2 {
             color: #F7931A;
             margin: 0 0 25px 0;
@@ -67,11 +82,10 @@
             font-size: 18px;
             box-sizing: border-box;
         }
-        /* Custom slider styling */
         input[type="range"] {
             width: 100%;
             height: 10px;
-            background: #F7931A; /* orange track */
+            background: #F7931A;
             border-radius: 5px;
             outline: none;
             opacity: 0.9;
@@ -83,7 +97,7 @@
             appearance: none;
             width: 28px;
             height: 28px;
-            background: url('./bitcoin-btc-logo.png') no-repeat center center;
+            background: url('https://cryptologos.cc/logos/bitcoin-btc-logo.png') no-repeat center center;
             background-size: contain;
             cursor: pointer;
             border: none;
@@ -93,7 +107,7 @@
         input[type="range"]::-moz-range-thumb {
             width: 28px;
             height: 28px;
-            background: url('/.bitcoin-btc-logo.png') no-repeat center center;
+            background: url('https://cryptologos.cc/logos/bitcoin-btc-logo.png') no-repeat center center;
             background-size: contain;
             cursor: pointer;
             border: none;
@@ -103,7 +117,7 @@
         input[type="range"]::-ms-thumb {
             width: 28px;
             height: 28px;
-            background: url('./bitcoin-btc-logo.png') no-repeat center center;
+            background: url('https://cryptologos.cc/logos/bitcoin-btc-logo.png') no-repeat center center;
             background-size: contain;
             cursor: pointer;
             border: none;
@@ -138,10 +152,10 @@
 <body>
     <div class="container">
 
-        <!-- Intro box with logo above -->
+        <!-- Intro box with logo -->
         <div class="intro-box">
             <div class="logo-container">
-                <img src="./bitcoin-btc-logo.png">
+                <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin Logo" class="bitcoin-logo">
             </div>
             <h1>Bitcoin-veien</h1>
             <p>
@@ -151,6 +165,13 @@
                 Si hei til kryptografisk sikret digital valuta som følger en fastslått og uforanderlig utstedelsesrate.<br><br>
                 Ta første steget ned bitcoin-veien.
             </p>
+        </div>
+
+        <!-- New Bitcoin Price Tracker -->
+        <div class="price-box">
+            <h2>Aktuell Bitcoin-pris</h2>
+            <div class="price-display" id="btcPrice">Laster pris...</div>
+            <div class="price-update" id="lastUpdate">Oppdateres hvert minutt</div>
         </div>
 
         <!-- Planner box -->
@@ -180,6 +201,32 @@
     </div>
 
     <script>
+        // --- Bitcoin Price Fetcher ---
+        const btcPriceEl = document.getElementById('btcPrice');
+        const lastUpdateEl = document.getElementById('lastUpdate');
+
+        async function fetchBitcoinPrice() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=nok');
+                const data = await response.json();
+                const price = data.bitcoin.nok;
+                btcPriceEl.textContent = price.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kr';
+                const now = new Date().toLocaleTimeString('nb-NO');
+                lastUpdateEl.textContent = `Sist oppdatert: ${now}`;
+            } catch (error) {
+                btcPriceEl.textContent = 'Kunne ikke hente pris';
+                lastUpdateEl.textContent = 'Prøv igjen senere';
+                console.error('Feil ved henting av BTC-pris:', error);
+            }
+        }
+
+        // Fetch on load
+        fetchBitcoinPrice();
+
+        // Refresh every 60 seconds
+        setInterval(fetchBitcoinPrice, 60000);
+
+        // --- Existing Calculator Logic ---
         const netIncomeInput = document.getElementById('netIncome');
         const slider = document.getElementById('fractionSlider');
         const fractionDisplay = document.getElementById('fractionDisplay');
@@ -207,4 +254,3 @@
     </script>
 </body>
 </html>
-
