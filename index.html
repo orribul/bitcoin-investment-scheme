@@ -130,7 +130,7 @@
             color: #F7931A;
         }
         .result {
-            margin: 25px 0;
+            margin: 20px 0;
             font-size: 1.25em;
             color: #000000;
             padding: 12px;
@@ -141,6 +141,11 @@
             color: #F7931A;
             font-weight: bold;
             font-size: 1.4em;
+        }
+        .btc-result {
+            font-size: 1.1em;
+            color: #F7931A;
+            margin-top: 8px;
         }
         .note {
             font-size: 0.9em;
@@ -167,7 +172,7 @@
             </p>
         </div>
 
-        <!-- New Bitcoin Price Tracker -->
+        <!-- Bitcoin Price Tracker -->
         <div class="price-box">
             <h2>Aktuell Bitcoin-pris</h2>
             <div class="price-display" id="btcPrice">Laster pris...</div>
@@ -192,9 +197,20 @@
                 Tilsvarende daglig investering: <span id="dailyAmount">0.00</span> kr
             </div>
 
+            <div class="result">
+                Månedlig BTC-kjøp: <span id="monthlyBTC">0.00000000</span> BTC
+                <div class="btc-result" id="monthlyBTCSats"></div>
+            </div>
+
+            <div class="result">
+                Daglig BTC-kjøp: <span id="dailyBTC">0.00000000</span> BTC
+                <div class="btc-result" id="dailyBTCSats"></div>
+            </div>
+
             <div class="note">
                 Daglig beløp = månedlig investering × 12 ÷ 365<br>
-                (fordeler det månedlige beløpet jevnt over ca. 30,42 dager per måned)
+                (fordeler det månedlige beløpet jevnt over ca. 30,42 dager per måned)<br>
+                BTC-beløp beregnes ut fra aktuell Bitcoin-pris (automatisk oppdatert).
             </div>
         </div>
 
@@ -204,34 +220,40 @@
         // --- Bitcoin Price Fetcher ---
         const btcPriceEl = document.getElementById('btcPrice');
         const lastUpdateEl = document.getElementById('lastUpdate');
+        let currentBTCPrice = null; // Will store the fetched price
 
         async function fetchBitcoinPrice() {
             try {
                 const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=nok');
                 const data = await response.json();
-                const price = data.bitcoin.nok;
-                btcPriceEl.textContent = price.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kr';
+                currentBTCPrice = data.bitcoin.nok;
+                btcPriceEl.textContent = currentBTCPrice.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kr';
                 const now = new Date().toLocaleTimeString('nb-NO');
                 lastUpdateEl.textContent = `Sist oppdatert: ${now}`;
+                updateBTCAmounts(); // Recalculate BTC amounts when price updates
             } catch (error) {
                 btcPriceEl.textContent = 'Kunne ikke hente pris';
                 lastUpdateEl.textContent = 'Prøv igjen senere';
+                currentBTCPrice = null;
+                updateBTCAmounts(); // Show fallback
                 console.error('Feil ved henting av BTC-pris:', error);
             }
         }
 
-        // Fetch on load
+        // Fetch on load + every 60 seconds
         fetchBitcoinPrice();
-
-        // Refresh every 60 seconds
         setInterval(fetchBitcoinPrice, 60000);
 
-        // --- Existing Calculator Logic ---
+        // --- Calculator Logic ---
         const netIncomeInput = document.getElementById('netIncome');
         const slider = document.getElementById('fractionSlider');
         const fractionDisplay = document.getElementById('fractionDisplay');
         const investmentAmountEl = document.getElementById('investmentAmount');
         const dailyAmountEl = document.getElementById('dailyAmount');
+        const monthlyBTCEl = document.getElementById('monthlyBTC');
+        const dailyBTCEl = document.getElementById('dailyBTC');
+        const monthlyBTCSatsEl = document.getElementById('monthlyBTCSats');
+        const dailyBTCSatsEl = document.getElementById('dailyBTCSats');
 
         function updateCalculations() {
             const denominator = parseInt(slider.value);
@@ -243,13 +265,41 @@
             const monthlyInvestment = netIncome * fraction;
             const dailyInvestment = monthlyInvestment * 12 / 365;
 
-            investmentAmountEl.textContent = monthlyInvestment.toFixed(2);
-            dailyAmountEl.textContent = dailyInvestment.toFixed(2);
+            investmentAmountEl.textContent = monthlyInvestment.toLocaleString('nb-NO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            dailyAmountEl.textContent = dailyInvestment.toLocaleString('nb-NO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            updateBTCAmounts();
         }
 
+        function updateBTCAmounts() {
+            if (currentBTCPrice && currentBTCPrice > 0) {
+                const monthlyInvestment = parseFloat(investmentAmountEl.textContent.replace(/\s/g, '')) || 0;
+                const dailyInvestment = parseFloat(dailyAmountEl.textContent.replace(/\s/g, '')) || 0;
+
+                const monthlyBTC = monthlyInvestment / currentBTCPrice;
+                const dailyBTC = dailyInvestment / currentBTCPrice;
+
+                monthlyBTCEl.textContent = monthlyBTC.toFixed(8).replace(/\.?0+$/, '');
+                dailyBTCEl.textContent = dailyBTC.toFixed(8).replace(/\.?0+$/, '');
+
+                // Optional: Show in satoshis (1 BTC = 100,000,000 sats) for very small amounts
+                const monthlySats = Math.round(monthlyBTC * 100000000);
+                const dailySats = Math.round(dailyBTC * 100000000);
+                monthlyBTCSatsEl.textContent = monthlySats > 0 ? `(ca. ${monthlySats.toLocaleString('nb-NO')} satoshi)` : '';
+                dailyBTCSatsEl.textContent = dailySats > 0 ? `(ca. ${dailySats.toLocaleString('nb-NO')} satoshi)` : '';
+            } else {
+                monthlyBTCEl.textContent = 'Kunne ikke beregne';
+                dailyBTCEl.textContent = 'Kunne ikke beregne';
+                monthlyBTCSatsEl.textContent = '';
+                dailyBTCSatsEl.textContent = '';
+            }
+        }
+
+        // Events
         slider.addEventListener('input', updateCalculations);
         netIncomeInput.addEventListener('input', updateCalculations);
 
+        // Initial run
         updateCalculations();
     </script>
 </body>
