@@ -11,30 +11,28 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             min-height: 100vh;
         }
         .container {
-            max-width: 450px;
-            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        .intro-box, .price-box, .planner-box {
+        .columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .column {
+            flex: 1;
+            min-width: 300px;
+        }
+        .box {
             background-color: #FFFFFF;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
             text-align: center;
-        }
-        .logo-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .bitcoin-logo {
-            width: 120px;
-            height: auto;
         }
         .intro-box h1 {
             color: #F7931A;
@@ -47,10 +45,17 @@
             line-height: 1.6;
             margin: 0;
         }
-        .price-box h2 {
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .bitcoin-logo {
+            width: 120px;
+            height: auto;
+        }
+        .price-box h2, .invite-box h2, .planner-box h2 {
             color: #F7931A;
-            margin: 0 0 15px 0;
-            font-size: 1.6em;
+            margin: 0 0 20px 0;
         }
         .price-display {
             font-size: 2.2em;
@@ -62,10 +67,39 @@
             font-size: 0.9em;
             color: #555;
         }
-        .planner-box h2 {
-            color: #F7931A;
-            margin: 0 0 25px 0;
+        .invite-code-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .invite-code {
             font-size: 1.8em;
+            font-style: italic;
+            color: #000000;
+            background-color: #FFF8F0;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #F7931A;
+        }
+        .copy-btn {
+            background-color: #F7931A;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .copy-btn:hover {
+            background-color: #e07b00;
+        }
+        .invite-text {
+            font-size: 1.1em;
+            color: #333;
+            margin-top: 15px;
         }
         label {
             display: block;
@@ -104,16 +138,7 @@
             border-radius: 50%;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
-        input[type="range"]::-moz-range-thumb {
-            width: 28px;
-            height: 28px;
-            background: url('https://cryptologos.cc/logos/bitcoin-btc-logo.png') no-repeat center center;
-            background-size: contain;
-            cursor: pointer;
-            border: none;
-            border-radius: 50%;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        }
+        input[type="range"]::-moz-range-thumb,
         input[type="range"]::-ms-thumb {
             width: 28px;
             height: 28px;
@@ -168,90 +193,124 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(247, 147, 26, 0.5);
         }
-        .disclaimer {
+        .disclaimer, .note {
             font-size: 0.85em;
             color: #666;
             margin-top: 15px;
         }
-        .note {
-            font-size: 0.9em;
-            color: #555;
-            margin-top: 30px;
+        @media (max-width: 768px) {
+            .columns {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="columns">
 
-        <!-- Intro box with logo -->
-        <div class="intro-box">
-            <div class="logo-container">
-                <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin Logo" class="bitcoin-logo">
-            </div>
-            <h1>Bitcoin-veien</h1>
-            <p>
-                Si farvel til norske kroner, som stadig taper seg i verdi.<br>
-                Si hei til verdens nye, digitale valuta - bitcoin.<br><br>
-                Ta farvel med penger som kan skapes ut av intet av en sentralbank.<br>
-                Si hei til kryptografisk sikret digital valuta som følger en fastslått og uforanderlig utstedelsesrate.<br><br>
-                Ta første steget ned bitcoin-veien.
-            </p>
-        </div>
+            <!-- Left column -->
+            <div class="column">
+                <!-- Intro box -->
+                <div class="box intro-box">
+                    <div class="logo-container">
+                        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin Logo" class="bitcoin-logo">
+                    </div>
+                    <h1>Bitcoin-veien</h1>
+                    <p>
+                        Si farvel til norske kroner, som stadig taper seg i verdi.<br>
+                        Si hei til verdens nye, digitale valuta - bitcoin.<br><br>
+                        Ta farvel med penger som kan skapes ut av intet av en sentralbank.<br>
+                        Si hei til kryptografisk sikret digital valuta som følger en fastslått og uforanderlig utstedelsesrate.<br><br>
+                        Ta første steget ned bitcoin-veien.
+                    </p>
+                </div>
 
-        <!-- Bitcoin Price Tracker -->
-        <div class="price-box">
-            <h2>Aktuell Bitcoin-pris</h2>
-            <div class="price-display" id="btcPrice">Laster pris...</div>
-            <div class="price-update" id="lastUpdate">Oppdateres hvert minutt</div>
-        </div>
-
-        <!-- Planner box -->
-        <div class="planner-box">
-            <h2>Bitcoin Investeringsplanlegger</h2>
-
-            <label for="netIncome">Månedlig nettoinntekt (kr):</label>
-            <input type="number" id="netIncome" placeholder="f.eks. 60000" step="any">
-
-            <label for="fractionSlider">Andel til investering i Bitcoin: <span id="fractionDisplay">1/2</span></label>
-            <input type="range" id="fractionSlider" min="2" max="12" step="1" value="2">
-
-            <div class="result">
-                Månedlig investering: <span id="investmentAmount">0.00</span> kr
-            </div>
-
-            <div class="result">
-                Tilsvarende daglig investering: <span id="dailyAmount">0.00</span> kr
-            </div>
-
-            <div class="result">
-                Månedlig BTC-kjøp: <span id="monthlyBTC">0.00000000</span> BTC
-                <div class="btc-result" id="monthlyBTCSats"></div>
-            </div>
-
-            <div class="result">
-                Daglig BTC-kjøp: <span id="dailyBTC">0.00000000</span> BTC
-                <div class="btc-result" id="dailyBTCSats"></div>
-            </div>
-
-            <!-- "Kjøp nå" button – updated to Bare Bitcoin -->
-            <div class="buy-button-container">
-                <a href="https://barebitcoin.no" target="_blank" class="buy-button">Kjøp nå</a>
-                <div class="disclaimer">
-                    Gå til Bare Bitcoin – Norges enkleste Bitcoin-app – for å kjøpe Bitcoin trygt med NOK via Vipps/BankID.<br>
-                    Husk: Investering i kryptovaluta innebærer risiko. Gjør egen research.
+                <!-- Price tracker -->
+                <div class="box price-box">
+                    <h2>Aktuell Bitcoin-pris</h2>
+                    <div class="price-display" id="btcPrice">Laster pris...</div>
+                    <div class="price-update" id="lastUpdate">Oppdateres hvert minutt</div>
                 </div>
             </div>
 
-            <div class="note">
-                Daglig beløp = månedlig investering × 12 ÷ 365<br>
-                (fordeler det månedlige beløpet jevnt over ca. 30,42 dager per måned)<br>
-                BTC-beløp beregnes ut fra aktuell Bitcoin-pris (automatisk oppdatert).
-            </div>
-        </div>
+            <!-- Right column -->
+            <div class="column">
+                <!-- Invite box -->
+                <div class="box invite-box">
+                    <h2>Min invitasjonskode</h2>
+                    <div class="invite-code-container">
+                        <span class="invite-code" id="inviteCode">0YOlpZcm</span>
+                        <button class="copy-btn" onclick="copyCode()">Kopier</button>
+                    </div>
+                    <p class="invite-text">Bruk denne koden for å få 70 kr i gratis avgifter.</p>
+                </div>
 
+                <!-- Planner box -->
+                <div class="box planner-box">
+                    <h2>Bitcoin Investeringsplanlegger</h2>
+
+                    <label for="netIncome">Månedlig nettoinntekt (kr):</label>
+                    <input type="number" id="netIncome" placeholder="f.eks. 60000" step="any">
+
+                    <label for="fractionSlider">Andel til investering i Bitcoin: <span id="fractionDisplay">1/2</span></label>
+                    <input type="range" id="fractionSlider" min="2" max="12" step="1" value="2">
+
+                    <div class="result">
+                        Månedlig investering: <span id="investmentAmount">0.00</span> kr
+                    </div>
+
+                    <div class="result">
+                        Tilsvarende daglig investering: <span id="dailyAmount">0.00</span> kr
+                    </div>
+
+                    <div class="result">
+                        Månedlig BTC-kjøp: <span id="monthlyBTC">0.00000000</span> BTC
+                        <div class="btc-result" id="monthlyBTCSats"></div>
+                    </div>
+
+                    <div class="result">
+                        Daglig BTC-kjøp: <span id="dailyBTC">0.00000000</span> BTC
+                        <div class="btc-result" id="dailyBTCSats"></div>
+                    </div>
+
+                    <div class="buy-button-container">
+                        <a href="https://barebitcoin.no" target="_blank" class="buy-button">Kjøp nå</a>
+                        <div class="disclaimer">
+                            Gå til Bare Bitcoin – Norges enkleste Bitcoin-app – for å kjøpe Bitcoin trygt med NOK via Vipps/BankID.<br>
+                            Husk: Investering i kryptovaluta innebærer risiko. Gjør egen research.
+                        </div>
+                    </div>
+
+                    <div class="note">
+                        Daglig beløp = månedlig investering × 12 ÷ 365<br>
+                        (fordeler det månedlige beløpet jevnt over ca. 30,42 dager per måned)<br>
+                        BTC-beløp beregnes ut fra aktuell Bitcoin-pris (automatisk oppdatert).
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <script>
+        // Copy to clipboard function
+        function copyCode() {
+            const code = document.getElementById('inviteCode').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.innerText;
+                btn.innerText = 'Kopiert!';
+                btn.style.backgroundColor = '#4CAF50';
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.backgroundColor = '#F7931A';
+                }, 2000);
+            }).catch(err => {
+                console.error('Feil ved kopiering:', err);
+            });
+        }
+
         // --- Bitcoin Price Fetcher ---
         const btcPriceEl = document.getElementById('btcPrice');
         const lastUpdateEl = document.getElementById('lastUpdate');
