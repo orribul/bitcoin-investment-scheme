@@ -147,6 +147,32 @@
             color: #F7931A;
             margin-top: 8px;
         }
+        .buy-button-container {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .buy-button {
+            display: inline-block;
+            background-color: #F7931A;
+            color: white;
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(247, 147, 26, 0.4);
+            transition: all 0.3s ease;
+        }
+        .buy-button:hover {
+            background-color: #e07b00;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(247, 147, 26, 0.5);
+        }
+        .disclaimer {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 15px;
+        }
         .note {
             font-size: 0.9em;
             color: #555;
@@ -207,6 +233,15 @@
                 <div class="btc-result" id="dailyBTCSats"></div>
             </div>
 
+            <!-- "Kjøp nå" button – updated to Bare Bitcoin -->
+            <div class="buy-button-container">
+                <a href="https://barebitcoin.no" target="_blank" class="buy-button">Kjøp nå</a>
+                <div class="disclaimer">
+                    Gå til Bare Bitcoin – Norges enkleste Bitcoin-app – for å kjøpe Bitcoin trygt med NOK via Vipps/BankID.<br>
+                    Husk: Investering i kryptovaluta innebærer risiko. Gjør egen research.
+                </div>
+            </div>
+
             <div class="note">
                 Daglig beløp = månedlig investering × 12 ÷ 365<br>
                 (fordeler det månedlige beløpet jevnt over ca. 30,42 dager per måned)<br>
@@ -220,7 +255,7 @@
         // --- Bitcoin Price Fetcher ---
         const btcPriceEl = document.getElementById('btcPrice');
         const lastUpdateEl = document.getElementById('lastUpdate');
-        let currentBTCPrice = null; // Will store the fetched price
+        let currentBTCPrice = null;
 
         async function fetchBitcoinPrice() {
             try {
@@ -230,17 +265,16 @@
                 btcPriceEl.textContent = currentBTCPrice.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kr';
                 const now = new Date().toLocaleTimeString('nb-NO');
                 lastUpdateEl.textContent = `Sist oppdatert: ${now}`;
-                updateBTCAmounts(); // Recalculate BTC amounts when price updates
+                updateBTCAmounts();
             } catch (error) {
                 btcPriceEl.textContent = 'Kunne ikke hente pris';
                 lastUpdateEl.textContent = 'Prøv igjen senere';
                 currentBTCPrice = null;
-                updateBTCAmounts(); // Show fallback
+                updateBTCAmounts();
                 console.error('Feil ved henting av BTC-pris:', error);
             }
         }
 
-        // Fetch on load + every 60 seconds
         fetchBitcoinPrice();
         setInterval(fetchBitcoinPrice, 60000);
 
@@ -282,7 +316,6 @@
                 monthlyBTCEl.textContent = monthlyBTC.toFixed(8).replace(/\.?0+$/, '');
                 dailyBTCEl.textContent = dailyBTC.toFixed(8).replace(/\.?0+$/, '');
 
-                // Optional: Show in satoshis (1 BTC = 100,000,000 sats) for very small amounts
                 const monthlySats = Math.round(monthlyBTC * 100000000);
                 const dailySats = Math.round(dailyBTC * 100000000);
                 monthlyBTCSatsEl.textContent = monthlySats > 0 ? `(ca. ${monthlySats.toLocaleString('nb-NO')} satoshi)` : '';
@@ -295,11 +328,9 @@
             }
         }
 
-        // Events
         slider.addEventListener('input', updateCalculations);
         netIncomeInput.addEventListener('input', updateCalculations);
 
-        // Initial run
         updateCalculations();
     </script>
 </body>
