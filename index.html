@@ -304,11 +304,19 @@
                     <div class="value"><span id="dailyBTC">0.00000000</span> BTC</div>
                     <div id="dailyBTCSats" class="btc-result"></div>
                 </div>
+                <div class="result-card">
+                    <div class="label">Måneder til 1 BTC</div>
+                    <div class="value"><span id="monthsTo1BTC">—</span></div>
+                </div>
+                <div class="result-card">
+                    <div class="label">Dager til 1 BTC</div>
+                    <div class="value"><span id="daysTo1BTC">—</span></div>
+                </div>
             </div>
 
             <div class="note">
                 Daglig beløp = månedlig investering × 12 ÷ 365 (ca. 30,42 dager/mnd)<br>
-                BTC-beløp basert på live pris (oppdateres hvert minutt).
+                BTC-beløp og tid til 1 BTC basert på live pris (konstant investering og pris antas).
             </div>
         </div>
 
@@ -397,7 +405,7 @@
         fetchBitcoinPrice();
         setInterval(fetchBitcoinPrice, 60000);
 
-        // Calculator
+        // Calculator + new time-to-1-BTC fields
         const netIncomeInput = document.getElementById('netIncome');
         const slider = document.getElementById('fractionSlider');
         const fractionDisplay = document.getElementById('fractionDisplay');
@@ -407,6 +415,8 @@
         const dailyBTCEl = document.getElementById('dailyBTC');
         const monthlyBTCSatsEl = document.getElementById('monthlyBTCSats');
         const dailyBTCSatsEl = document.getElementById('dailyBTCSats');
+        const monthsTo1BTCEl = document.getElementById('monthsTo1BTC');
+        const daysTo1BTCEl = document.getElementById('daysTo1BTC');
 
         function updateCalculations() {
             const denominator = parseInt(slider.value);
@@ -426,11 +436,11 @@
 
         function updateBTCAmounts() {
             if (currentBTCPrice && currentBTCPrice > 0) {
-                const monthly = parseFloat(investmentAmountEl.textContent.replace(/\s/g, '')) || 0;
-                const daily = parseFloat(dailyAmountEl.textContent.replace(/\s/g, '')) || 0;
+                const monthlyKr = parseFloat(investmentAmountEl.textContent.replace(/\s/g, '')) || 0;
+                const dailyKr = parseFloat(dailyAmountEl.textContent.replace(/\s/g, '')) || 0;
 
-                const monthlyBTC = monthly / currentBTCPrice;
-                const dailyBTC = daily / currentBTCPrice;
+                const monthlyBTC = monthlyKr / currentBTCPrice;
+                const dailyBTC = dailyKr / currentBTCPrice;
 
                 monthlyBTCEl.textContent = monthlyBTC.toFixed(8).replace(/\.?0+$/, '');
                 dailyBTCEl.textContent = dailyBTC.toFixed(8).replace(/\.?0+$/, '');
@@ -439,9 +449,25 @@
                 const dailySats = Math.round(dailyBTC * 1e8);
                 monthlyBTCSatsEl.textContent = monthlySats > 0 ? `(ca. ${monthlySats.toLocaleString('nb-NO')} satoshi)` : '';
                 dailyBTCSatsEl.textContent = dailySats > 0 ? `(ca. ${dailySats.toLocaleString('nb-NO')} satoshi)` : '';
+
+                // New fields: time to 1 BTC
+                if (monthlyBTC > 0) {
+                    const monthsTo1 = 1 / monthlyBTC;
+                    monthsTo1BTCEl.textContent = monthsTo1.toLocaleString('nb-NO', { maximumFractionDigits: 0 });
+                } else {
+                    monthsTo1BTCEl.textContent = '—';
+                }
+
+                if (dailyBTC > 0) {
+                    const daysTo1 = 1 / dailyBTC;
+                    daysTo1BTCEl.textContent = daysTo1.toLocaleString('nb-NO', { maximumFractionDigits: 0 });
+                } else {
+                    daysTo1BTCEl.textContent = '—';
+                }
             } else {
                 monthlyBTCEl.textContent = dailyBTCEl.textContent = 'Kunne ikke beregne';
                 monthlyBTCSatsEl.textContent = dailyBTCSatsEl.textContent = '';
+                monthsTo1BTCEl.textContent = daysTo1BTCEl.textContent = '—';
             }
         }
 
