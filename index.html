@@ -6,6 +6,12 @@
     <title>Bitcoin-veien – Investeringsplanlegger</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --btc-orange: #F7931A;
+            --btc-orange-dark: #e07b00;
+            --light-bg: #fffaf5;
+            --card-bg: white;
+        }
         body {
             background-color: #f8f9fa;
             color: #1a1a1a;
@@ -17,18 +23,19 @@
         header {
             position: sticky;
             top: 0;
-            background: white;
+            background: var(--card-bg);
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
             z-index: 1000;
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 2px solid var(--btc-orange);
         }
         .site-title {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #F7931A;
+            color: var(--btc-orange);
             margin: 0;
         }
         .dropdown-container { position: relative; }
@@ -48,10 +55,10 @@
             position: absolute;
             top: 100%;
             right: 0;
-            background: white;
-            border: 1px solid #F7931A;
-            border-radius: 8px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            background: var(--card-bg);
+            border: 2px solid var(--btc-orange);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(247,147,26,0.25);
             min-width: 240px;
             opacity: 0;
             transform: translateY(-12px);
@@ -72,137 +79,152 @@
             text-decoration: none;
             font-size: 1.05rem;
             font-weight: 500;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
         .dropdown-item:hover {
-            background: #FFF8F0;
-            color: #F7931A;
+            background: var(--light-bg);
+            color: var(--btc-orange);
+            padding-left: 32px;
         }
         .main-content {
-            padding: 120px 2rem 4rem;
+            padding: 120px 2rem 6rem;
             max-width: 1400px;
             margin: 0 auto;
         }
         .box {
-            background: white;
+            background: var(--card-bg);
             padding: 2.5rem;
             border-radius: 16px;
             box-shadow: 0 6px 24px rgba(0,0,0,0.08);
             margin-bottom: 3rem;
+            border: 1px solid #F7931A20;
         }
         h1, h2 {
-            color: #F7931A;
+            color: var(--btc-orange);
             font-weight: 700;
             margin: 0 0 1.5rem;
         }
         .intro-box h1 { font-size: 2.8rem; }
-        .intro-box p { font-size: 1.25rem; line-height: 1.8; color: #333; }
+        .intro-box p {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #333;
+        }
         .logo-container { margin-bottom: 1.5rem; }
         .bitcoin-logo { width: 140px; height: auto; }
         .price-display {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: #F7931A;
+            font-size: 3.8rem;
+            font-weight: 800;
+            color: var(--btc-orange);
             margin: 1rem 0;
+            text-shadow: 0 2px 8px rgba(247,147,26,0.3);
         }
-        .price-update { font-size: 1rem; color: #666; }
-        .columns {
+        .price-update { font-size: 1rem; color: #555; }
+        .results-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2.5rem 0;
         }
-        @media (max-width: 1024px) {
-            .columns { grid-template-columns: 1fr; }
+        .result-card {
+            background: var(--light-bg);
+            padding: 1.8rem;
+            border-radius: 12px;
+            border: 2px solid #F7931A30;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .result-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(247,147,26,0.2);
+        }
+        .result-card .value {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--btc-orange);
+            margin: 0.6rem 0;
+        }
+        .result-card .label {
+            font-size: 1.1rem;
+            color: #444;
+            font-weight: 500;
         }
         label {
             display: block;
             margin: 1.5rem 0 0.75rem;
             font-weight: 600;
-            color: #F7931A;
-            font-size: 1.1rem;
+            color: var(--btc-orange);
+            font-size: 1.15rem;
         }
         input[type="number"] {
             width: 100%;
             padding: 1rem;
             font-size: 1.3rem;
-            border: 2px solid #F7931A;
+            border: 2px solid var(--btc-orange);
             border-radius: 10px;
             box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--btc-orange-dark);
+            box-shadow: 0 0 0 3px #F7931A20;
         }
         input[type="range"] {
             width: 100%;
             height: 12px;
-            background: #F7931A;
+            background: linear-gradient(to right, var(--btc-orange) 0%, var(--btc-orange) 50%, #ddd 50%, #ddd 100%);
             border-radius: 6px;
             -webkit-appearance: none;
             margin: 1.5rem 0;
         }
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             background: url('https://cryptologos.cc/logos/bitcoin-btc-logo.png') no-repeat center;
             background-size: contain;
             cursor: pointer;
             border: none;
             border-radius: 50%;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(247,147,26,0.4);
         }
         #fractionDisplay {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #F7931A;
-        }
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-        .result-card {
-            background: #FFF8F0;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #F7931A20;
-            text-align: center;
-        }
-        .result-card .value {
-            font-size: 2.2rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            color: #F7931A;
-            margin: 0.5rem 0;
-        }
-        .result-card .label {
-            font-size: 1.1rem;
-            color: #444;
+            color: var(--btc-orange);
         }
         .note {
             font-size: 0.95rem;
             color: #555;
-            margin-top: 2rem;
+            margin-top: 2.5rem;
             text-align: center;
+            padding: 1rem;
+            background: #FFF8F0;
+            border-radius: 10px;
+            border: 1px solid #F7931A30;
         }
         .buy-button {
             display: inline-block;
-            background: #F7931A;
+            background: var(--btc-orange);
             color: white;
-            font-size: 1.5rem;
-            font-weight: 600;
-            padding: 1rem 3rem;
+            font-size: 1.6rem;
+            font-weight: 700;
+            padding: 1.2rem 3.5rem;
             border-radius: 50px;
             text-decoration: none;
-            box-shadow: 0 6px 16px rgba(247,147,26,0.3);
+            box-shadow: 0 8px 20px rgba(247,147,26,0.35);
             transition: all 0.25s ease;
         }
         .buy-button:hover {
-            background: #e07b00;
-            transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(247,147,26,0.4);
+            background: var(--btc-orange-dark);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(247,147,26,0.45);
         }
         .disclaimer {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            color: #555;
+            margin-top: 1.8rem;
         }
         .invite-code-container {
             display: flex;
@@ -212,31 +234,35 @@
             margin: 2rem 0;
         }
         .invite-code {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-style: italic;
             color: #000;
             background: #FFF8F0;
-            padding: 0.8rem 1.8rem;
+            padding: 1rem 2rem;
             border-radius: 12px;
-            border: 2px solid #F7931A;
+            border: 3px solid var(--btc-orange);
+            font-weight: 600;
         }
         .copy-btn {
-            background: #F7931A;
+            background: var(--btc-orange);
             color: white;
             border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 10px;
+            padding: 1rem 2rem;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
-        .copy-btn:hover { background: #e07b00; }
+        .copy-btn:hover {
+            background: var(--btc-orange-dark);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
 
-    <!-- Fixed Header with Dropdown -->
+    <!-- Fixed Header -->
     <header>
         <h1 class="site-title">Bitcoin-veien</h1>
         <div class="dropdown-container">
@@ -254,21 +280,21 @@
 
     <div class="main-content">
 
-        <!-- Intro Section – updated with new text -->
-    <div id="intro" class="box intro-box">
-        <div class="logo-container">
-            <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin Logo" class="bitcoin-logo">
+        <!-- Intro -->
+        <div id="intro" class="box intro-box">
+            <div class="logo-container">
+                <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin Logo" class="bitcoin-logo">
+            </div>
+            <h1>Bitcoin-veien</h1>
+            <p>
+                Si farvel til norske kroner, som sakte men sikkert mister kjøpekraft.<br>
+                Si hei til bitcoin – den digitale valutaen som ikke kan inflatere bort.<br><br>
+                Farvel til fiat-penger som trykkes i det uendelige av sentralbanker.<br>
+                Hei til en hardt begrenset, kryptografisk beskyttet valuta med en evig fast utstedelseskurve.<br><br>
+                Ta det første steget.<br>
+                Gå bitcoin-veien.
+            </p>
         </div>
-        <h1>Bitcoin-veien</h1>
-        <p>
-            Si farvel til norske kroner, som sakte men sikkert mister kjøpekraft.<br>
-            Si hei til bitcoin – den digitale valutaen som ikke kan inflatere bort.<br><br>
-            Farvel til fiat-penger som trykkes i det uendelige av sentralbanker.<br>
-            Hei til en hardt begrenset, kryptografisk beskyttet valuta med en evig fast utstedelseskurve.<br><br>
-            Ta det første steget.<br>
-            Gå bitcoin-veien.
-        </p>
-    </div>
 
         <!-- Price -->
         <div id="price" class="box">
@@ -321,7 +347,7 @@
             </div>
         </div>
 
-        <!-- Invite – at bottom -->
+        <!-- Invite -->
         <div id="invite" class="box">
             <h2>Min invitasjonskode</h2>
             <div class="invite-code-container">
@@ -406,7 +432,7 @@
         fetchBitcoinPrice();
         setInterval(fetchBitcoinPrice, 60000);
 
-        // Calculator + new time-to-1-BTC fields
+        // Calculator
         const netIncomeInput = document.getElementById('netIncome');
         const slider = document.getElementById('fractionSlider');
         const fractionDisplay = document.getElementById('fractionDisplay');
@@ -451,17 +477,17 @@
                 monthlyBTCSatsEl.textContent = monthlySats > 0 ? `(ca. ${monthlySats.toLocaleString('nb-NO')} satoshi)` : '';
                 dailyBTCSatsEl.textContent = dailySats > 0 ? `(ca. ${dailySats.toLocaleString('nb-NO')} satoshi)` : '';
 
-                // New fields: time to 1 BTC
+                // Time to 1 BTC
                 if (monthlyBTC > 0) {
-                    const monthsTo1 = 1 / monthlyBTC;
-                    monthsTo1BTCEl.textContent = monthsTo1.toLocaleString('nb-NO', { maximumFractionDigits: 0 });
+                    const months = 1 / monthlyBTC;
+                    monthsTo1BTCEl.textContent = months.toLocaleString('nb-NO', { maximumFractionDigits: 0 });
                 } else {
                     monthsTo1BTCEl.textContent = '—';
                 }
 
                 if (dailyBTC > 0) {
-                    const daysTo1 = 1 / dailyBTC;
-                    daysTo1BTCEl.textContent = daysTo1.toLocaleString('nb-NO', { maximumFractionDigits: 0 });
+                    const days = 1 / dailyBTC;
+                    daysTo1BTCEl.textContent = days.toLocaleString('nb-NO', { maximumFractionDigits: 0 });
                 } else {
                     daysTo1BTCEl.textContent = '—';
                 }
@@ -478,4 +504,3 @@
     </script>
 </body>
 </html>
-
