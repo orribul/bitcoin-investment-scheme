@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="no">
+<html lang="no" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,22 +9,40 @@
         :root {
             --btc-orange: #F7931A;
             --btc-orange-dark: #e07b00;
-            --light-bg: #fffaf5;
+            --bg: #f8f9fa;
             --card-bg: white;
+            --text: #1a1a1a;
+            --text-secondary: #555;
+            --border: #F7931A20;
+            --shadow: rgba(0,0,0,0.08);
+            --light-bg: #FFF8F0;
         }
+
+        [data-theme="dark"] {
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --border: #F7931A40;
+            --shadow: rgba(0,0,0,0.6);
+            --light-bg: #2a2a2a;
+        }
+
         body {
-            background-color: #f8f9fa;
-            color: #1a1a1a;
+            background: var(--bg);
+            color: var(--text);
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
             padding: 0;
             line-height: 1.6;
+            transition: background 0.4s ease, color 0.4s ease;
         }
+
         header {
             position: sticky;
             top: 0;
             background: var(--card-bg);
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 12px var(--shadow);
             z-index: 1000;
             padding: 1rem 2rem;
             display: flex;
@@ -32,25 +50,39 @@
             align-items: center;
             border-bottom: 2px solid var(--btc-orange);
         }
+
         .site-title {
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--btc-orange);
             margin: 0;
         }
-        .dropdown-container { position: relative; }
-        .dropdown-btn {
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .theme-toggle {
             background: none;
             border: none;
+            font-size: 1.8rem;
             cursor: pointer;
-            padding: 0;
+            color: var(--text-secondary);
+            transition: color 0.3s, transform 0.3s;
         }
-        .bitcoin-logo-header {
-            width: 52px;
-            height: 52px;
-            transition: transform 0.2s ease;
+
+        .theme-toggle:hover {
+            color: var(--btc-orange);
+            transform: scale(1.15);
         }
+
+        .dropdown-container { position: relative; }
+        .dropdown-btn { background: none; border: none; cursor: pointer; padding: 0; }
+        .bitcoin-logo-header { width: 52px; height: 52px; transition: transform 0.2s ease; }
         .bitcoin-logo-header:hover { transform: scale(1.1); }
+
         .dropdown-menu {
             position: absolute;
             top: 100%;
@@ -58,7 +90,7 @@
             background: var(--card-bg);
             border: 2px solid var(--btc-orange);
             border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(247,147,26,0.25);
+            box-shadow: 0 8px 24px var(--shadow);
             min-width: 240px;
             opacity: 0;
             transform: translateY(-12px);
@@ -67,15 +99,11 @@
             overflow: hidden;
             z-index: 999;
         }
-        .dropdown-menu.open {
-            opacity: 1;
-            transform: translateY(0);
-            visibility: visible;
-        }
+        .dropdown-menu.open { opacity: 1; transform: translateY(0); visibility: visible; }
         .dropdown-item {
             display: block;
             padding: 14px 24px;
-            color: #1a1a1a;
+            color: var(--text);
             text-decoration: none;
             font-size: 1.05rem;
             font-weight: 500;
@@ -84,71 +112,76 @@
         .dropdown-item:hover {
             background: var(--light-bg);
             color: var(--btc-orange);
-            padding-left: 32px;
         }
+
         .main-content {
             padding: 120px 2rem 6rem;
             max-width: 1400px;
             margin: 0 auto;
         }
+
         .box {
             background: var(--card-bg);
             padding: 2.5rem;
             border-radius: 16px;
-            box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+            box-shadow: 0 6px 24px var(--shadow);
             margin-bottom: 3rem;
-            border: 1px solid #F7931A20;
+            border: 1px solid var(--border);
         }
+
         h1, h2 {
             color: var(--btc-orange);
             font-weight: 700;
             margin: 0 0 1.5rem;
         }
+
         .intro-box h1 { font-size: 2.8rem; }
-        .intro-box p {
-            font-size: 1.25rem;
-            line-height: 1.8;
-            color: #333;
-        }
-        .logo-container { margin-bottom: 1.5rem; }
+        .intro-box p { font-size: 1.25rem; line-height: 1.8; color: var(--text-secondary); }
+
+        .logo-container { margin-bottom: 1.5rem; text-align: center; }
         .bitcoin-logo { width: 140px; height: auto; }
+
         .price-display {
             font-size: 3.8rem;
             font-weight: 800;
             color: var(--btc-orange);
             margin: 1rem 0;
-            text-shadow: 0 2px 8px rgba(247,147,26,0.3);
         }
-        .price-update { font-size: 1rem; color: #555; }
+
+        .price-update { font-size: 1rem; color: var(--text-secondary); }
+
         .results-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
             margin: 2.5rem 0;
         }
+
         .result-card {
             background: var(--light-bg);
             padding: 1.8rem;
             border-radius: 12px;
-            border: 2px solid #F7931A30;
+            border: 2px solid var(--border);
             text-align: center;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.3s ease;
         }
+
         .result-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 12px 32px rgba(247,147,26,0.2);
+            box-shadow: 0 12px 32px rgba(247,147,26,0.18);
         }
+
         .result-card .value {
             font-size: 2.4rem;
             font-weight: 800;
             color: var(--btc-orange);
-            margin: 0.6rem 0;
         }
+
         .result-card .label {
             font-size: 1.1rem;
-            color: #444;
-            font-weight: 500;
+            color: var(--text-secondary);
         }
+
         label {
             display: block;
             margin: 1.5rem 0 0.75rem;
@@ -156,37 +189,27 @@
             color: var(--btc-orange);
             font-size: 1.15rem;
         }
+
         input[type="number"] {
             width: 100%;
             padding: 1rem;
             font-size: 1.3rem;
+            background: var(--card-bg);
+            color: var(--text);
             border: 2px solid var(--btc-orange);
             border-radius: 10px;
             box-sizing: border-box;
-            transition: border-color 0.2s;
         }
-        input[type="number"]:focus {
-            outline: none;
-            border-color: var(--btc-orange-dark);
-            box-shadow: 0 0 0 3px #F7931A20;
-        }
+
         input[type="range"] {
             width: 100%;
             height: 12px;
-            background: var(--btc-orange);          /* Full track orange */
+            background: var(--btc-orange);
             border-radius: 6px;
             -webkit-appearance: none;
             margin: 1.5rem 0;
-            outline: none;
         }
-        
-        /* WebKit browsers (Chrome, Safari, Edge) */
-        input[type="range"]::-webkit-slider-runnable-track {
-            background: var(--btc-orange);
-            height: 12px;
-            border-radius: 6px;
-        }
-        
+
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             width: 36px;
@@ -197,16 +220,15 @@
             border: none;
             border-radius: 50%;
             box-shadow: 0 4px 12px rgba(247,147,26,0.4);
-            margin-top: -12px; /* Centers thumb vertically on track */
+            margin-top: -12px;
         }
-        
-        /* Firefox */
+
         input[type="range"]::-moz-range-track {
             background: var(--btc-orange);
             height: 12px;
             border-radius: 6px;
         }
-        
+
         input[type="range"]::-moz-range-thumb {
             width: 36px;
             height: 36px;
@@ -217,44 +239,19 @@
             border-radius: 50%;
             box-shadow: 0 4px 12px rgba(247,147,26,0.4);
         }
-        
-        /* Edge/IE fallback (optional) */
-        input[type="range"]::-ms-track {
-            background: transparent;
-            border-color: transparent;
-            color: transparent;
-        }
-        
-        input[type="range"]::-ms-fill-lower,
-        input[type="range"]::-ms-fill-upper {
-            background: var(--btc-orange);
-        }
-        
-        input[type="range"]::-ms-thumb {
-            width: 36px;
-            height: 36px;
-            background: url('https://cryptologos.cc/logos/bitcoin-btc-logo.png') no-repeat center;
-            background-size: contain;
-            border: none;
-            border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(247,147,26,0.4);
-        }
-        }
+
         #fractionDisplay {
             font-size: 1.6rem;
             font-weight: 700;
             color: var(--btc-orange);
         }
-        .note {
+
+        .note, .disclaimer {
             font-size: 0.95rem;
-            color: #555;
-            margin-top: 2.5rem;
-            text-align: center;
-            padding: 1rem;
-            background: #FFF8F0;
-            border-radius: 10px;
-            border: 1px solid #F7931A30;
+            color: var(--text-secondary);
+            margin-top: 1.5rem;
         }
+
         .buy-button {
             display: inline-block;
             background: var(--btc-orange);
@@ -267,16 +264,13 @@
             box-shadow: 0 8px 20px rgba(247,147,26,0.35);
             transition: all 0.25s ease;
         }
+
         .buy-button:hover {
             background: var(--btc-orange-dark);
             transform: translateY(-6px);
             box-shadow: 0 16px 40px rgba(247,147,26,0.45);
         }
-        .disclaimer {
-            font-size: 0.95rem;
-            color: #555;
-            margin-top: 1.8rem;
-        }
+
         .invite-code-container {
             display: flex;
             justify-content: center;
@@ -284,16 +278,18 @@
             gap: 1.5rem;
             margin: 2rem 0;
         }
+
         .invite-code {
             font-size: 2.8rem;
             font-style: italic;
-            color: #000;
-            background: #FFF8F0;
+            color: var(--text);
+            background: var(--light-bg);
             padding: 1rem 2rem;
             border-radius: 12px;
             border: 3px solid var(--btc-orange);
             font-weight: 600;
         }
+
         .copy-btn {
             background: var(--btc-orange);
             color: white;
@@ -305,6 +301,7 @@
             font-weight: 600;
             transition: all 0.2s;
         }
+
         .copy-btn:hover {
             background: var(--btc-orange-dark);
             transform: scale(1.05);
@@ -313,19 +310,21 @@
 </head>
 <body>
 
-    <!-- Fixed Header -->
     <header>
         <h1 class="site-title">Bitcoin-veien</h1>
-        <div class="dropdown-container">
-            <button class="dropdown-btn" id="dropdownBtn">
-                <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Meny" class="bitcoin-logo-header">
-            </button>
-            <div class="dropdown-menu" id="dropdownMenu">
-                <a href="#intro" class="dropdown-item">Velkommen / Bitcoin-veien</a>
-                <a href="#price" class="dropdown-item">Aktuell Bitcoin-pris</a>
-                <a href="#planner" class="dropdown-item">Investeringsplanlegger</a>
-                <a href="#invite" class="dropdown-item">Min invitasjonskode</a>
+        <div class="header-right">
+            <div class="dropdown-container">
+                <button class="dropdown-btn" id="dropdownBtn">
+                    <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Meny" class="bitcoin-logo-header">
+                </button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="#intro" class="dropdown-item">Velkommen / Bitcoin-veien</a>
+                    <a href="#price" class="dropdown-item">Aktuell Bitcoin-pris</a>
+                    <a href="#planner" class="dropdown-item">Investeringsplanlegger</a>
+                    <a href="#invite" class="dropdown-item">Min invitasjonskode</a>
+                </div>
             </div>
+            <button class="theme-toggle" id="themeToggle" title="Bytt tema">☀️</button>
         </div>
     </header>
 
@@ -405,7 +404,7 @@
                 <span class="invite-code" id="inviteCode">0YOlpZcm</span>
                 <button class="copy-btn" onclick="copyCode()">Kopier</button>
             </div>
-            <p class="invite-text">Bruk denne koden ved registrering for å få 70 kr i gratis avgifter når du kjøper eller selger bitcoin.</p>
+            <p class="invite-text">Bruk denne koden for å få 70 kr i gratis avgifter.</p>
 
             <div style="margin-top: 2.5rem; text-align: center;">
                 <a href="https://barebitcoin.no" target="_blank" class="buy-button">Kjøp nå</a>
@@ -419,7 +418,29 @@
     </div>
 
     <script>
-        // Dropdown toggle + close on outside click
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        // Load saved or system preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            html.setAttribute('data-theme', savedTheme);
+            themeToggle.innerHTML = savedTheme === 'dark' ? '🌙' : '☀️';
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            html.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '🌙';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            themeToggle.innerHTML = next === 'dark' ? '🌙' : '☀️';
+            localStorage.setItem('theme', next);
+        });
+
+        // Dropdown logic
         const dropdownBtn = document.getElementById('dropdownBtn');
         const dropdownMenu = document.getElementById('dropdownMenu');
 
@@ -434,7 +455,6 @@
             }
         });
 
-        // Smooth scroll for menu items
         document.querySelectorAll('.dropdown-item').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -444,7 +464,7 @@
             });
         });
 
-        // Copy invite code
+        // Copy code
         function copyCode() {
             const code = document.getElementById('inviteCode').innerText;
             navigator.clipboard.writeText(code).then(() => {
@@ -528,7 +548,6 @@
                 monthlyBTCSatsEl.textContent = monthlySats > 0 ? `(ca. ${monthlySats.toLocaleString('nb-NO')} satoshi)` : '';
                 dailyBTCSatsEl.textContent = dailySats > 0 ? `(ca. ${dailySats.toLocaleString('nb-NO')} satoshi)` : '';
 
-                // Time to 1 BTC
                 if (monthlyBTC > 0) {
                     const months = 1 / monthlyBTC;
                     monthsTo1BTCEl.textContent = months.toLocaleString('nb-NO', { maximumFractionDigits: 0 });
@@ -555,5 +574,3 @@
     </script>
 </body>
 </html>
-
-
