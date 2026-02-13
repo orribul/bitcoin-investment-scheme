@@ -64,6 +64,46 @@
             gap: 1.5rem;
         }
 
+                /* Main navigation links in header */
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 0 1.5rem;
+        }
+        
+        .nav-link {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 1.05rem;
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover,
+        .nav-link:active {
+            color: var(--btc-orange);
+            background: var(--light-bg);
+            /* or use underline instead: text-decoration: underline; text-underline-offset: 4px; */
+        }
+        
+        /* Mobile: make nav links wrap if screen is very narrow */
+        @media (max-width: 768px) {
+            .main-nav {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin: 0.8rem 0;
+                font-size: 0.95rem;
+            }
+            
+            .header-right {
+                gap: 0.8rem;
+            }
+        }
+
         .theme-toggle {
             background: none;
             border: none;
@@ -583,4 +623,5 @@
     </script>
 </body>
 </html>
+
 
